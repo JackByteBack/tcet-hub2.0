@@ -750,7 +750,7 @@
                   alt &gt;
                   &lt;/picture&gt;
                 </noscript>
-                <video class="portal-video" id="design-video" preload="none" muted="" playsinline="" loop="" autoplay=""
+                <video class="portal-video" id="design-video" preload="none" muted="" playsinline="" loop=""
                   data-inline-media="" data-inline-media-plugins="PlayPauseButtonDisable, PlayProgress"
                   data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                   aria-label="TCET Hub video" role="img">
@@ -1377,7 +1377,7 @@
                   &lt;/picture&gt;
                 </noscript>
                 <video class="portal-video" id="entertainment-video" preload="none" muted="" playsinline="" loop=""
-                  autoplay="" data-inline-media="" data-inline-media-plugins="PlayPauseButtonDisable, PlayProgress"
+                  data-inline-media="" data-inline-media-plugins="PlayPauseButtonDisable, PlayProgress"
                   data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                   aria-label="Entertainment video" role="img">
                   <source
@@ -1490,7 +1490,7 @@
                                 &lt;/picture&gt;
                               </noscript>
                               <video id="card-immersive-videos-video" preload="auto" muted="" playsinline="" loop=""
-                                autoplay="" data-inline-media=""
+                                data-inline-media=""
                                 data-inline-media-plugins="PlayPauseButtonDisable, PlayProgress"
                                 data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                                 aria-label="Apple Immersive Video animation" role="img"
@@ -1993,7 +1993,7 @@
                   &lt;/picture&gt;
                 </noscript>
                 <video class="portal-video" id="productivity-video" preload="auto" muted="" playsinline="" loop=""
-                  autoplay="" data-inline-media=""
+                  data-inline-media=""
                   data-inline-media-plugins="ObjectFitFix, PlayPauseButtonDisable, PlayProgress"
                   data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                   aria-label="Animation of people interacting with TCET Hub" role="img">
@@ -2077,7 +2077,7 @@
                                 &lt;/picture&gt;
                               </noscript>
                               <video id="card-mac-virtual-display-video" preload="auto" muted="" playsinline="" loop=""
-                                autoplay="" data-inline-media=""
+                                data-inline-media=""
                                 data-inline-media-plugins="ObjectFitFix, PlayPauseButtonDisable, PlayProgress"
                                 data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                                 aria-label="Animation of a person wearing TCET Hub on a couch in a living room launches Mac Virtual Display"
@@ -2498,7 +2498,7 @@
                   &lt;/picture&gt;
                 </noscript>
                 <video class="portal-video" id="photos-videos-video" preload="auto" muted="" playsinline="" loop=""
-                  autoplay="" data-inline-media=""
+                  data-inline-media=""
                   data-inline-media-plugins="ObjectFitFix, PlayPauseButtonDisable, PlayProgress"
                   data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                   aria-label="Viewing photos and videos using TCET Hub animation" role="img">
@@ -2580,7 +2580,7 @@
                                 &lt;/picture&gt;
                               </noscript>
                               <video id="card-spatial-photos-and-videos-video" preload="auto" muted="" playsinline=""
-                                loop="" autoplay="" data-inline-media=""
+                                loop="" data-inline-media=""
                                 data-inline-media-plugins="ObjectFitFix, PlayPauseButtonDisable, PlayProgress"
                                 data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                                 aria-label="Demonstrating a Spatial Memory animation" role="img">
@@ -2989,7 +2989,7 @@
                   &lt;/picture&gt;
                 </noscript>
                 <video class="portal-video" id="connection-video" preload="auto" muted="" playsinline="" loop=""
-                  autoplay="" data-inline-media=""
+                  data-inline-media=""
                   data-inline-media-plugins="ObjectFitFix, PlayPauseButtonDisable, PlayProgress"
                   data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
                   aria-label="Wearing TCET Hub and connecting with others animation" role="img">
@@ -3068,7 +3068,7 @@
                                 alt &gt;
                                 &lt;/picture&gt;
                               </noscript>
-                              <video id="card-persona-video" preload="auto" muted="" playsinline="" loop="" autoplay=""
+                              <video id="card-persona-video" preload="auto" muted="" playsinline="" loop=""
                                 data-inline-media=""
                                 data-inline-media-plugins="ObjectFitFix, PlayPauseButtonDisable, PlayProgress"
                                 data-inline-media-play-keyframe="{ &#34;start&#34;: &#34;t - 100vh&#34;, &#34;end&#34;: &#34;b&#34; }"
@@ -3467,7 +3467,7 @@
                                 &lt;/picture&gt;
                               </noscript>
                               <video id="card-apps-selection-video" preload="auto" muted="" playsinline="" loop=""
-                                autoplay="" data-inline-media=""
+                                data-inline-media=""
                                 data-inline-media-plugins="ObjectFitFix, PlayPauseButtonDisable, PlayProgress"
                                 data-inline-media-play-keyframe="{ &#34;start&#34;: &#34;t - 100vh&#34;, &#34;end&#34;: &#34;b&#34; }"
                                 data-inline-media-pause-on-exit="true" data-inline-media-reset-on-exit="true"
@@ -5612,9 +5612,18 @@
 
           // Determine the most visible video
           this.videoNodes.forEach((ratio, vid) => {
-            if (ratio >= 0.6 && ratio > maxVisibility) {
+            if (ratio >= 0.7 && ratio > maxVisibility) {
               maxVisibility = ratio;
               candidateVideo = vid;
+            }
+          });
+
+          // Strict Single-Video Policy: Pause all videos except the candidate or ANY active video that dropped below 70%
+          this.videoNodes.forEach((ratio, vid) => {
+            if (vid !== candidateVideo && !vid.paused) {
+              vid.pause();
+              this.updateControllerUI(vid, false);
+              if (this.activeVideo === vid) this.activeVideo = null;
             }
           });
 
